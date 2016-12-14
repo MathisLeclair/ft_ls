@@ -6,7 +6,7 @@
 #    By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/12 19:21:21 by mleclair          #+#    #+#              #
-#    Updated: 2016/12/12 13:49:21 by mleclair         ###   ########.fr        #
+#    Updated: 2016/12/14 20:29:05 by bfrochot         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,8 @@ PATHTOMAKEFILE = ./libft/
 
 FILE =	main \
 		ls_flag \
-		ls_core
+		ls_core \
+		ft_sort
 
 OBJ  := $(addsuffix .o, $(FILE))
 

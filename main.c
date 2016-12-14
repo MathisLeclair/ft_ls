@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bfrochot <bfrochot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/12 15:20:17 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/14 18:25:07 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/14 23:49:03 by bfrochot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,25 +31,24 @@ void	ls_ls(t_truc *machin, char *av)
 		ls_core(machin, av, &lsd);
 }
 
-void	parse_flag(char *av, int u, t_truc *machin)
+t_truc	*parse_flag(char *av, int u, int k)
 {
+	t_truc *machin;
+
+	machin = malloc(sizeof(t_truc));
 	while(av[u])
 	{
-		if (av[u] == 'R')
-			machin->flag_R = 1;
-		else if(av[u] == 'r')
-			machin->flag_r = 1;
-		else if(av[u] == 'l')
-			machin->flag_l = 1;
-		else if(av[u] == 'a')
-			machin->flag_a = 1;
-		else if(av[u] == 't')
-			machin->flag_t = 1;
-		else if(av[u] != '-' && av[u] != 'R' && av[u] != 'r' &&
-			av[u] != 'l' && av[u] != 'a' && av[u] != 't')
+		machin->flag_R = (k == 2 && av[u] == 'R') ? 1 : 0;
+		machin->flag_r = (k == 2 && av[u] == 'r') ? 1 : 0;
+		machin->flag_l = (k == 2 && av[u] == 'l') ? 1 : 0;
+		machin->flag_a = (k == 2 && av[u] == 'a') ? 1 : 0;
+		machin->flag_t = (k == 2 && av[u] == 't') ? 1 : 0;
+		if(av[u] != '-' && av[u] != 'R' && av[u] != 'r' &&
+			av[u] != 'l' && av[u] != 'a' && av[u] != 't' && k == 2)
 			ft_err(-1);
 		++u;
 	}
+	return (machin);
 }
 
 int		main(int ac, char **av)
@@ -57,12 +56,14 @@ int		main(int ac, char **av)
 	t_truc *machin;
 	int k;
 
-	machin = malloc(sizeof(t_truc));
 	k = 1;
 	if (ac > 1)
+	{
 		k = (av[1][0] == '-' ? 2 : 1);
-	if (k == 2)
-		parse_flag(av[1], 0, machin);
+		machin = parse_flag(av[1], 0, k);
+	}
+	else
+		machin = parse_flag(" ", 0, k);
 	if (ac == 0 || (ac == 2 && k == 2) || (ac == 1 && k == 1))
 		ls_ls(machin, "./");
 	while (k < ac)

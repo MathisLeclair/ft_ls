@@ -3,54 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ls_core.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bfrochot <bfrochot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/13 16:58:32 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/14 18:32:30 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/14 20:30:01 by bfrochot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ls.h"
 
-void	ft_lstsort(t_truc *parse, t_file *lst, int i)
-{
-	int u;
-
-	u = 0;
-	if (parse->flag_t == 0 && parse->flag_r == 0)
-	{
-		while (u != i - 1)
-		{
-			printf("u = %d et i - 1 = %i\n", u, i - 1);
-			u = 0;
-			while (lst->next)
-			{
-				printf("Test\n");
-				if(strcmp(lst->name, (lst->next)->name) > 0)
-				{
-					(lst->next)->prev = lst->prev;
-					lst->next = (lst->next)->next;
-					lst->prev = lst->next;
-					(lst->next)->next = lst;
-				}
-				else
-					lst = lst->next;
-			}
-			while (lst->prev)
-			{
-				if(strcmp(lst->name, (lst->prev)->name) > 0)
-				{
-					(lst->prev)->next = lst->next;
-					lst->prev = (lst->prev)->prev;
-					lst->next = lst->prev;
-					(lst->prev)->prev = lst;
-					++u;
-				}
-				lst = lst->prev;
-			}
-		}
-	}
-}
 
 t_file	*ft_lstcreate(struct dirent *dp)
 {
@@ -79,27 +40,24 @@ void	ls_core(t_truc *parse, char *path, t_file **lsd)
 		i = 1;
 		*lsd = ft_lstcreate(dp);
 		lst = *lsd;
-		// free(dp);
 		while ((dp = readdir(dir)))
 		{
 			lst->next = ft_lstcreate(dp);
-			(lst->next)->prev = *lsd;
+			(lst->next)->prev = lst;
 			lst = lst->next;
-			// free(dp);
 			++i;
 		}
+		lst = *lsd;
 		ft_lstsort(parse, *lsd, i);
-	}
-	//affichage
-	while (*lsd)
-	{
-		if ((*lsd)->name[0] != '.'|| parse->flag_a == 1)
+		while (lst)
 		{
-			write(1, dp->d_name, ft_strlen(dp->d_name));
-			write(1, "\n", 1);
+			if (lst->name[0] != '.'|| parse->flag_a == 1)
+			{
+				write(1, lst->name, ft_strlen(lst->name));
+				write(1, "\n", 1);
+			}
+			lst = lst->next;
 		}
-		*lsd = (*lsd)->next;
 	}
-	//fin affichage
 	closedir(dir);
 }

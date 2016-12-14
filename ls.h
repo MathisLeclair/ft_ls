@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ls.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bfrochot <bfrochot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/12 15:20:30 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/14 18:22:37 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/14 19:57:24 by bfrochot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,6 @@ typedef struct		r_file
 
 int		flag_R(t_truc *parse, char *path);
 void	ls_core(t_truc *parse, char *av, t_file **lsd);
+void	ft_lstsort(t_truc *parse, t_file *lst, int i);
 
 #endif

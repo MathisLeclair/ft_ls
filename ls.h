@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ls.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bfrochot <bfrochot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/12 15:20:30 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/14 19:57:24 by bfrochot         ###   ########.fr       */
+/*   Updated: 2016/12/16 18:24:30 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <sys/stat.h>
 # include <sys/xattr.h>
 # include <errno.h>
+# include <grp.h>
 # include "./libft/libft.h"
 
 typedef struct	s_truc
@@ -35,6 +36,7 @@ typedef struct	s_truc
 typedef struct		s_file
 {
 	char			*acces;
+	char			type;
 	int				nbf;
 	char			*owner;
 	char			*group;

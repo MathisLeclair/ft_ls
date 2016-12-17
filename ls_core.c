@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/13 16:58:32 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/16 18:24:46 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/17 16:48:22 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,51 +35,45 @@ char	type(struct stat *buf)
 	return (ret);
 }
 
-char	*droit(int mode, t_file *lsd)
+char	*droit(int mode, x_file *lsd)
 {
-	char *str;
+	static char *str;
 
 	str = malloc(11);
-	str = "----------\0";
-	(mode & S_IRUSR) ? str[1] = 'r' : (void)str;
-	(mode & S_IWUSR) ? str[2] = 'w' : (void)str;
-	(mode & S_IXUSR) ? str[3] = 'x' : (void)str;
-	if (mode & S_ISUID)
-		str[3] = ((mode & S_IXUSR) ? 's' : 'S');
-	(mode & S_IRGRP) ? str[4] = 'r' : (void)str;
-	(mode & S_IWGRP) ? str[5] = 'w' : (void)str;
-	(mode & S_IXGRP) ? str[6] = 'x' : (void)str;
-	if (mode & S_ISGID)
-		str[6] = ((mode & S_IXGRP) ? 's' : 'S');
-	(mode & S_IROTH) ? str[7] = 'r' : (void)str;
-	(mode & S_IWOTH) ? str[8] = 'w' : (void)str;
-	(mode & S_IXOTH) ? str[9] = 'x' : (void)str;
-	if (mode & S_ISVTX)
-		str[9] = ((str[9] == '-') ? 'T' : 't');
+	ft_strcpy(str, "----------\0");
+	(mode & S_IRUSR) ? str[1] = 'r' : 0;
+	(mode & S_IWUSR) ? str[2] = 'w' : 0;
+	(mode & S_IXUSR) ? str[3] = 'x' : 0;
+	(mode & S_IRGRP) ? str[4] = 'r' : 0;
+	(mode & S_IWGRP) ? str[5] = 'w' : 0;
+	(mode & S_IXGRP) ? str[6] = 'x' : 0;
+	(mode & S_IROTH) ? str[7] = 'r' : 0;
+	(mode & S_IWOTH) ? str[8] = 'w' : 0;
+	(mode & S_IXOTH) ? str[9] = 'x' : 0;
 	str[0] = lsd->type;
 	return (str);
 }
 
-t_file	*ft_lstcreate(struct dirent *dp, char *path)
+x_file	*ft_lstcreate(struct dirent *dp, char *path)
 {	
 	struct stat *buf;
 	struct group *group;
 	struct passwd *test; 
-	t_file *lsd;
+	x_file *lsd;
 	char *pathname;
 
 	pathname = ft_strjoin(path, dp->d_name);
 	buf = malloc(sizeof(struct stat));
 	group = malloc(sizeof(struct passwd));
-	lsd = malloc(sizeof(t_file));
-	lsd->name = ft_strdup(dp->d_name);
+	lsd = malloc(sizeof(x_file));
 	stat(pathname, buf);
 	group = getgrgid(buf->st_gid);
 	test = getpwuid(buf->st_uid);
 	lsd->owner = test->pw_name;
+	lsd->name = ft_strdup(dp->d_name);
 	lsd->size = buf->st_size;
 	lsd->group = group->gr_name;
-	lsd->date = buf->st_atime;
+	lsd->date = buf->st_mtime;
 	lsd->type = type(buf);
 	lsd->acces = droit(buf->st_mode, lsd);
 	lsd->next = NULL;
@@ -87,11 +81,11 @@ t_file	*ft_lstcreate(struct dirent *dp, char *path)
 	return (lsd);
 }
 
-void	ls_core(t_truc *parse, char *path, t_file **lsd)
+void	ls_core(t_truc *parse, char *path, x_file **lsd)
 {
 	DIR *dir;
 	struct dirent *dp;
-	t_file *lst;
+	x_file *lst;
 	int i;
 
 	dir = opendir(path);
@@ -110,15 +104,18 @@ void	ls_core(t_truc *parse, char *path, t_file **lsd)
 		lst = *lsd;
 		(*lsd)->nbf = i;
 		ft_lstsort(parse, *lsd, i);
-		while (lst)
-		{
-			if (lst->name[0] != '.'|| parse->flag_a == 1)
+		if (parse->flag_l == 0)
+			while (lst)
 			{
-				write(1, lst->name, ft_strlen(lst->name));
-				write(1, "\n", 1);
+				if (lst->name[0] != '.'|| parse->flag_a == 1)
+				{
+					write(1, lst->name, ft_strlen(lst->name));
+					write(1, "\n", 1);
+				}
+				lst = lst->next;
 			}
-			lst = lst->next;
-		}
+			else if (parse->flag_l == 1)
+				print_l(lst, parse);
 	}
 	closedir(dir);
 }

@@ -19,7 +19,8 @@ PATHTOMAKEFILE = ./libft/
 FILE =	main \
 		ls_flag \
 		ls_core \
-		ft_sort
+		ft_sort \
+		transfo
 
 OBJ  := $(addsuffix .o, $(FILE))
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ls_flag.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bfrochot <bfrochot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/13 13:12:51 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/14 20:53:09 by bfrochot         ###   ########.fr       */
+/*   Updated: 2016/12/17 16:48:09 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int		flag_R(t_truc *parse, char *path)
 	// DIR *dir2;
 	char *caca;
 	// struct dirent *dp;
-	t_file *lsd;
+	x_file *lsd;
 
 	caca = malloc(2000);
 	caca[0] = 0;

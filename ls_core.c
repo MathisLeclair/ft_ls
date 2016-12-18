@@ -6,21 +6,18 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/13 16:58:32 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/17 16:48:22 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/18 18:29:16 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ls.h"
-
 
 char	type(struct stat *buf)
 {
 	char ret;
 
 	ret = 'k';
-	if (S_ISREG(buf->st_mode) == 1)
-		ret = '-';
-	else if (S_ISDIR(buf->st_mode) == 1)
+	if (S_ISDIR(buf->st_mode) == 1)
 		ret = 'd';
 	else if (S_ISCHR(buf->st_mode) == 1)
 		ret = 'c';
@@ -35,7 +32,7 @@ char	type(struct stat *buf)
 	return (ret);
 }
 
-char	*droit(int mode, x_file *lsd)
+char	*droit(int mode, t_file *lsd)
 {
 	static char *str;
 
@@ -54,26 +51,27 @@ char	*droit(int mode, x_file *lsd)
 	return (str);
 }
 
-x_file	*ft_lstcreate(struct dirent *dp, char *path)
-{	
-	struct stat *buf;
-	struct group *group;
-	struct passwd *test; 
-	x_file *lsd;
-	char *pathname;
+t_file	*ft_lstcreate(struct dirent *dp, char *path)
+{
+	struct stat		*buf;
+	struct group	*group;
+	struct passwd	*test;
+	t_file			*lsd;
+	char			*pathname;
 
 	pathname = ft_strjoin(path, dp->d_name);
 	buf = malloc(sizeof(struct stat));
 	group = malloc(sizeof(struct passwd));
-	lsd = malloc(sizeof(x_file));
+	lsd = malloc(sizeof(t_file));
 	stat(pathname, buf);
 	group = getgrgid(buf->st_gid);
 	test = getpwuid(buf->st_uid);
-	lsd->owner = test->pw_name;
+	lsd->owner = ft_strdup(test->pw_name);
 	lsd->name = ft_strdup(dp->d_name);
 	lsd->size = buf->st_size;
-	lsd->group = group->gr_name;
+	lsd->group = ft_strdup(group->gr_name);
 	lsd->date = buf->st_mtime;
+	lsd->nbf = buf->st_nlink;
 	lsd->type = type(buf);
 	lsd->acces = droit(buf->st_mode, lsd);
 	lsd->next = NULL;
@@ -81,12 +79,12 @@ x_file	*ft_lstcreate(struct dirent *dp, char *path)
 	return (lsd);
 }
 
-void	ls_core(t_truc *parse, char *path, x_file **lsd)
+void	ls_core(t_truc *parse, char *path, t_file **lsd)
 {
-	DIR *dir;
-	struct dirent *dp;
-	x_file *lst;
-	int i;
+	DIR				*dir;
+	struct dirent	*dp;
+	t_file			*lst;
+	int				i;
 
 	dir = opendir(path);
 	if ((dp = readdir(dir)))
@@ -102,20 +100,19 @@ void	ls_core(t_truc *parse, char *path, x_file **lsd)
 			++i;
 		}
 		lst = *lsd;
-		(*lsd)->nbf = i;
 		ft_lstsort(parse, *lsd, i);
 		if (parse->flag_l == 0)
 			while (lst)
 			{
-				if (lst->name[0] != '.'|| parse->flag_a == 1)
+				if (lst->name[0] != '.' || parse->flag_a == 1)
 				{
 					write(1, lst->name, ft_strlen(lst->name));
 					write(1, "\n", 1);
 				}
 				lst = lst->next;
 			}
-			else if (parse->flag_l == 1)
-				print_l(lst, parse);
+		else if (parse->flag_l == 1)
+			print_l(lst, parse);
 	}
 	closedir(dir);
 }

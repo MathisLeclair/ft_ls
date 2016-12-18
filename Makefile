@@ -20,7 +20,8 @@ FILE =	main \
 		ls_flag \
 		ls_core \
 		ft_sort \
-		transfo
+		transfo \
+		ft_strrev
 
 OBJ  := $(addsuffix .o, $(FILE))
 
@@ -34,7 +35,7 @@ $(NAME): $(OBJ)
 	@echo "|           sub compilation :          |"
 	@echo "|               libft                  |"
 	@make -C $(PATHTOMAKEFILE)
-	@gcc -Wall -Werror -g -L./libft/ -lft -Wextra $(OBJ)
+	@gcc -Wall -Werror -L./libft/ -lft -o $(NAME) -Wextra $(OBJ)
 	@echo "|                 FIN                  |"
 	@echo "----------------------------------------"
 	@echo "               ________"

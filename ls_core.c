@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/13 16:58:32 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/18 18:29:16 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/18 19:21:47 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	type(struct stat *buf)
 {
 	char ret;
 
-	ret = 'k';
+	ret = '-';
 	if (S_ISDIR(buf->st_mode) == 1)
 		ret = 'd';
 	else if (S_ISCHR(buf->st_mode) == 1)
@@ -63,7 +63,7 @@ t_file	*ft_lstcreate(struct dirent *dp, char *path)
 	buf = malloc(sizeof(struct stat));
 	group = malloc(sizeof(struct passwd));
 	lsd = malloc(sizeof(t_file));
-	stat(pathname, buf);
+	lstat(pathname, buf);
 	group = getgrgid(buf->st_gid);
 	test = getpwuid(buf->st_uid);
 	lsd->owner = ft_strdup(test->pw_name);

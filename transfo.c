@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 10:59:09 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/19 14:48:42 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/19 20:06:45 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ t_file	*group_l(t_file *lst)
 	{
 		str = malloc(i + 1);
 		ft_memset(str, ' ', i);
-		str[i] = '\0';
+		str[i + 1] = '\0';
 		ft_cpd2(lst, str);
 		lst = lst->next;
 	}
@@ -142,20 +142,64 @@ t_file	*owner_l(t_file *lst)
 	return (sav);
 }
 
+void	linkatt(t_file *lst)
+{
+	char	str[10000];
+	int		len;
+	char	*new;
+	char	*tmp;
+
+	ft_bzero(str, 10000);
+	tmp = malloc(ft_strlen(lst->path) + ft_strlen(lst->name));
+	*tmp = 0;
+	ft_strcat(tmp, lst->path);
+	ft_strcat(tmp, lst->name);
+	len = readlink(tmp, str, 9999);
+	free(tmp);
+	new = malloc(len + 5 + ft_strlen(lst->name));
+	*new = 0;
+	ft_strcat(new, lst->name);
+	ft_strcat(new, " -> ");
+	ft_strcat(new, str);
+	tmp = lst->name;
+	lst->name = new;
+	free(tmp);
+}
+
 void	print_l(t_file *lst, t_truc *parse)
 {
 	char *time;
 
 	lst = group_l(lst);
 	lst = owner_l(lst);
-	while (lst)
+	while (lst->next)
 	{
-		if (lst->name[0] != '.' || parse->flag_a == 1)
+		if (lst->type == 'l')
+			linkatt(lst);
+		if (!parse->flag_r && (lst->name[0] != '.' || parse->flag_a == 1))
 		{
 			time = conv_time(lst->date, parse);
-			ft_printf("%s%5d %s %s\e %5d %s %s\n", lst->acces, lst->nbf, lst->owner,
+			ft_printf("%s%5d %s %s %5d %s %s\n", lst->acces, lst->nbf, lst->owner,
 				lst->group, lst->size, time, lst->name);
 		}
 		lst = lst->next;
+	}
+	if (!parse->flag_r && (lst->name[0] != '.' || parse->flag_a == 1))
+	{
+		if (lst->type == 'l')
+			linkatt(lst);
+		time = conv_time(lst->date, parse);
+		ft_printf("%s%5d %s %s %5d %s %s\n", lst->acces, lst->nbf, lst->owner,
+			lst->group, lst->size, time, lst->name);
+	}
+	while (parse->flag_r && lst)
+	{
+		if (parse->flag_r && (lst->name[0] != '.' || parse->flag_a == 1))
+		{
+			time = conv_time(lst->date, parse);
+			ft_printf("%s%5d %s %s %5d %s %s\n", lst->acces, lst->nbf, lst->owner,
+				lst->group, lst->size, time, lst->name);
+		}
+		lst = lst->prev;
 	}
 }

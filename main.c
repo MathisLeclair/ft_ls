@@ -6,18 +6,25 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/12 15:20:17 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/19 15:09:39 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/19 19:34:17 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ls.h"
 
-void	ft_err(int i)
+void	ft_err(int i, char *tmp)
 {
 	if (i == -1)
 	{
 		ft_printf("Illegal flag.\nusage: ./ls [-rRatTl]\n");
 		exit(-1);
+	}
+	else if(errno == ENOTDIR)
+		ft_printf("%s\n", tmp);
+	else
+	{
+		ft_printf("ft_ls: %s: ", tmp);
+		perror(NULL);
 	}
 }
 
@@ -54,7 +61,7 @@ void	parse_flag(char *av, int u, t_truc *truc)
 		if (av[u] != '-' && av[u] != 'R' && av[u] != 'r' &&
 			av[u] != 'l' && av[u] != 'a' && av[u] != 't' &&
 			av[u] != 'T')
-			ft_err(-1);
+			ft_err(-1, 0);
 		++u;
 	}
 }
@@ -64,16 +71,15 @@ int		main(int ac, char **av)
 	t_truc	*machin;
 	int		i;
 
-	i = 1;
+	i = 0;
 	machin = malloc(sizeof(t_truc));
 	ft_initparse(machin);
-	while (i < ac)
+	while (++i < ac)
 	{
 		if (av[i][0] == '-')
 			parse_flag(av[i], 0, machin);
 		else
 			break ;
-		++i;
 	}
 	if (i == ac)
 		ls_ls(machin, "./");

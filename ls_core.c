@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/13 16:58:32 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/19 16:51:50 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/19 19:42:07 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,15 +67,16 @@ t_file	*ft_lstcreate(struct dirent *dp, char *path)
 	group = getgrgid(buf->st_gid);
 	test = getpwuid(buf->st_uid);
 	lsd->owner = ft_strdup(test->pw_name);
-	lsd->name = ft_strdup(dp->d_name);
 	lsd->size = buf->st_size;
 	lsd->group = ft_strdup(group->gr_name);
 	lsd->date = buf->st_mtime;
 	lsd->nbf = buf->st_nlink;
 	lsd->type = type(buf);
+	lsd->name = ft_strdup(dp->d_name);
 	lsd->acces = droit(buf->st_mode, lsd);
 	lsd->next = NULL;
 	lsd->prev = NULL;
+	lsd->path = ft_strdup(path);
 	return (lsd);
 }
 
@@ -93,8 +94,7 @@ void	ls_core(t_truc *parse, char *path, t_file **lsd)
 	dir = opendir(path);
 	if (!dir)
 	{
-		ft_printf("ft_ls: %s: ", tmp);
-		perror(NULL);
+		ft_err(errno, tmp);
 		return ;
 	}
 	if ((dp = readdir(dir)))
@@ -121,10 +121,12 @@ void	ls_core(t_truc *parse, char *path, t_file **lsd)
 					ft_printf("%s\n", lst->name);
 				lst = lst->next;
 			}
-			ft_printf("%s\n", lst->name);
+			if ((lst->name[0] != '.' || parse->flag_a == 1))
+				ft_printf("%s\n", lst->name);
 			while (parse->flag_r && lst->prev)
 			{
-				ft_printf("%s\n", lst->prev->name);
+				if (lst->prev->name[0] != '.' || parse->flag_a == 1)
+					ft_printf("%s\n", lst->prev->name);
 				lst = lst->prev;
 			}
 		}

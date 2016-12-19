@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/13 16:58:32 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/18 19:21:47 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/19 16:51:50 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,18 @@ void	ls_core(t_truc *parse, char *path, t_file **lsd)
 	struct dirent	*dp;
 	t_file			*lst;
 	int				i;
+	char			*tmp;
 
+	tmp = path;
+	if (path[ft_strlen(path) - 1] != '/')
+		path = ft_strjoin(path, "/");
 	dir = opendir(path);
+	if (!dir)
+	{
+		ft_printf("ft_ls: %s: ", tmp);
+		perror(NULL);
+		return ;
+	}
 	if ((dp = readdir(dir)))
 	{
 		i = 1;
@@ -101,17 +111,24 @@ void	ls_core(t_truc *parse, char *path, t_file **lsd)
 		}
 		lst = *lsd;
 		ft_lstsort(parse, *lsd, i);
+		while (lst->prev)
+			lst = lst->prev;
 		if (parse->flag_l == 0)
-			while (lst)
+		{
+			while (lst->next)
 			{
-				if (lst->name[0] != '.' || parse->flag_a == 1)
-				{
-					write(1, lst->name, ft_strlen(lst->name));
-					write(1, "\n", 1);
-				}
+				if (parse->flag_r == 0 && (lst->name[0] != '.' || parse->flag_a == 1))
+					ft_printf("%s\n", lst->name);
 				lst = lst->next;
 			}
-		else if (parse->flag_l == 1)
+			ft_printf("%s\n", lst->name);
+			while (parse->flag_r && lst->prev)
+			{
+				ft_printf("%s\n", lst->prev->name);
+				lst = lst->prev;
+			}
+		}
+		else
 			print_l(lst, parse);
 	}
 	closedir(dir);

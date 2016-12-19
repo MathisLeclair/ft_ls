@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 10:59:09 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/18 19:11:39 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/19 14:48:42 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ void	print_l(t_file *lst, t_truc *parse)
 		if (lst->name[0] != '.' || parse->flag_a == 1)
 		{
 			time = conv_time(lst->date, parse);
-			ft_printf("%s%5d %s %s %5d %s %s\n", lst->acces, lst->nbf, lst->owner,
+			ft_printf("%s%5d %s %s\e %5d %s %s\n", lst->acces, lst->nbf, lst->owner,
 				lst->group, lst->size, time, lst->name);
 		}
 		lst = lst->next;

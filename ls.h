@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/12 15:20:30 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/19 19:39:09 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/20 19:16:58 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,12 @@ typedef struct		s_file
 	char			*acces;
 	char			type;
 	int				nbf;
+	char			*nbfconv;
 	char			*owner;
+	int				total;
 	char			*group;
 	int				size;
+	char			*sizeconv;
 	char			*name;
 	long int		date;
 	char			*path;

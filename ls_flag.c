@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/13 13:12:51 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/18 16:06:09 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/20 18:44:38 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,18 @@ int		flag_r(t_truc *parse, char *path)
 	ls_core(parse, path, &lsd);
 	while (lsd)
 	{
-		if ((lsd->name[0] != '.' || lsd->name[1] != 0) &&
-		(lsd->name[1] != '.' || lsd->name[2] != 0))
+		if ((lsd->name[0] != '.' || lsd->name[1] != 0) && (lsd->name[1] != '.' 
+			|| lsd->name[2] != 0) && (lsd->name[0] != '.' || parse->flag_a))
 		{
 			caca = ft_strcat(caca, path);
 			if (caca[ft_strlen(caca) - 1] != '/')
 				ft_strcat(caca, "/");
 			caca = ft_strcat(caca, lsd->name);
-			if ((dir = opendir(caca)))
+			if (lsd->type != 'l' && (dir = opendir(caca)))
 			{
 				closedir(dir);
 				write(1, "\n", 1);
-				ft_printf("%s\n", caca);
+				ft_printf("%s:\n", caca);
 				caca = ft_strcat(caca, "/");
 				flag_r(parse, caca);
 			}

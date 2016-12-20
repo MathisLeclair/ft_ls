@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 10:59:09 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/19 20:06:45 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/20 20:18:35 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,42 @@ void	ft_cpd2(t_file *lst, char *str)
 	lst->group = str;
 }
 
+void	ft_cpd3(t_file *lst, char **str)
+{
+	int		len;
+	int		k;
+	char	*tmp;
+
+	tmp = ft_itoa(lst->nbf);
+	k = ft_strlen(tmp);
+	len = ft_strlen(*str);
+	while (k--)
+	{
+		len--;
+		(*str)[len] = tmp[k];
+	}
+	free(tmp);
+	lst->nbfconv = *str;
+}
+
+void	ft_cpd4(t_file *lst, char **str)
+{
+	int		len;
+	int		k;
+	char	*tmp;
+
+	tmp = ft_itoa(lst->size);
+	k = ft_strlen(tmp);
+	len = ft_strlen(*str);
+	while (k--)
+	{
+		len--;
+		(*str)[len] = tmp[k];
+	}
+	free(tmp);
+	lst->sizeconv = *str;
+}
+
 t_file	*group_l(t_file *lst)
 {
 	t_file	*sav;
@@ -108,7 +144,7 @@ t_file	*group_l(t_file *lst)
 	{
 		str = malloc(i + 1);
 		ft_memset(str, ' ', i);
-		str[i + 1] = '\0';
+		str[i] = '\0';
 		ft_cpd2(lst, str);
 		lst = lst->next;
 	}
@@ -142,6 +178,68 @@ t_file	*owner_l(t_file *lst)
 	return (sav);
 }
 
+t_file	*jsp2(t_file *lst, t_truc *parse)
+{
+	t_file	*sav;
+	int		i;
+	char	*str;
+
+	i = 0;
+	sav = lst;
+	while (lst)
+	{
+		if (parse->flag_a == 1 || lst->name[0] != '.')
+		{
+			str = ft_itoa(lst->size);
+			if ((int)ft_strlen(str) > i)
+				i = ft_strlen(str);
+			free(str);
+		}
+		lst = lst->next;
+	}
+	lst = sav;
+	while (lst)
+	{
+		str = malloc(i + 1);
+		ft_memset(str, ' ', i);
+		str[i] = '\0';
+		ft_cpd4(lst, &str);
+		lst = lst->next;
+	}
+	return (sav);
+}
+
+t_file	*jsp(t_file *lst, t_truc *parse)
+{
+	t_file	*sav;
+	int		i;
+	char	*str;
+
+	i = 0;
+	sav = lst;
+	while (lst)
+	{
+		if (parse->flag_a == 1 || lst->name[0] != '.')
+		{
+			str = ft_itoa(lst->nbf);
+			if ((int)ft_strlen(str) > i)
+				i = ft_strlen(str);
+			free(str);
+		}
+		lst = lst->next;
+	}
+	lst = sav;
+	while (lst)
+	{
+		str = malloc(i + 1);
+		ft_memset(str, ' ', i);
+		str[i] = '\0';
+		ft_cpd3(lst, &str);
+		lst = lst->next;
+	}
+	return (sav);
+}
+
 void	linkatt(t_file *lst)
 {
 	char	str[10000];
@@ -166,12 +264,29 @@ void	linkatt(t_file *lst)
 	free(tmp);
 }
 
+void	ft_prtot(t_file *lst)
+{
+	int i;
+
+	i = 0;
+	while (lst)
+	{
+		i += lst->total;
+		lst = lst->next;
+	}
+	ft_printf("total %d\n", i);
+}
+
 void	print_l(t_file *lst, t_truc *parse)
 {
 	char *time;
 
 	lst = group_l(lst);
 	lst = owner_l(lst);
+	lst = jsp(lst, parse);
+	lst = jsp2(lst, parse);
+
+	ft_prtot(lst);
 	while (lst->next)
 	{
 		if (lst->type == 'l')
@@ -179,8 +294,8 @@ void	print_l(t_file *lst, t_truc *parse)
 		if (!parse->flag_r && (lst->name[0] != '.' || parse->flag_a == 1))
 		{
 			time = conv_time(lst->date, parse);
-			ft_printf("%s%5d %s %s %5d %s %s\n", lst->acces, lst->nbf, lst->owner,
-				lst->group, lst->size, time, lst->name);
+			ft_printf("%s %s %s  %s  %s%s %s\n", lst->acces, lst->nbfconv, lst->owner,
+				lst->group, lst->sizeconv, time, lst->name);
 		}
 		lst = lst->next;
 	}
@@ -189,16 +304,16 @@ void	print_l(t_file *lst, t_truc *parse)
 		if (lst->type == 'l')
 			linkatt(lst);
 		time = conv_time(lst->date, parse);
-		ft_printf("%s%5d %s %s %5d %s %s\n", lst->acces, lst->nbf, lst->owner,
-			lst->group, lst->size, time, lst->name);
+		ft_printf("%s %s %s  %s  %s%s %s\n",lst->acces, lst->nbfconv, lst->owner,
+			lst->group, lst->sizeconv, time, lst->name);
 	}
 	while (parse->flag_r && lst)
 	{
 		if (parse->flag_r && (lst->name[0] != '.' || parse->flag_a == 1))
 		{
 			time = conv_time(lst->date, parse);
-			ft_printf("%s%5d %s %s %5d %s %s\n", lst->acces, lst->nbf, lst->owner,
-				lst->group, lst->size, time, lst->name);
+			ft_printf("%s %s %s  %s  %s%s %s\n",lst->acces, lst->nbfconv, lst->owner,
+				lst->group, lst->sizeconv, time, lst->name);
 		}
 		lst = lst->prev;
 	}

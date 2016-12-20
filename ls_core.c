@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/13 16:58:32 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/19 19:42:07 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/20 20:24:55 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ char	*droit(int mode, t_file *lsd)
 {
 	static char *str;
 
-	str = malloc(11);
-	ft_strcpy(str, "----------\0");
+	str = malloc(12);
+	ft_strcpy(str, "---------- \0");
 	(mode & S_IRUSR) ? str[1] = 'r' : 0;
 	(mode & S_IWUSR) ? str[2] = 'w' : 0;
 	(mode & S_IXUSR) ? str[3] = 'x' : 0;
@@ -77,6 +77,7 @@ t_file	*ft_lstcreate(struct dirent *dp, char *path)
 	lsd->next = NULL;
 	lsd->prev = NULL;
 	lsd->path = ft_strdup(path);
+	lsd->total = buf->st_blocks;
 	return (lsd);
 }
 

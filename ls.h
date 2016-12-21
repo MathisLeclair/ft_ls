@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/12 15:20:30 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/21 12:32:59 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/21 17:13:46 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,6 @@ void				print_l(t_file *lst, t_truc *parse);
 char				*ft_strrev(char *str);
 void				ft_err(int i, char *tmp);
 void				list_free(t_file *lst);
+char				*ft_color(t_file *lsd, int i);
 
 #endif

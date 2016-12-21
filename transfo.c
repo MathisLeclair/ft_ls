@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 10:59:09 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/21 17:14:38 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/21 18:07:28 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,14 +264,15 @@ void	linkatt(t_file *lst)
 	free(tmp);
 }
 
-void	ft_prtot(t_file *lst)
+void	ft_prtot(t_file *lst, t_truc *parse)
 {
 	int i;
 
 	i = 0;
 	while (lst)
 	{
-		i += lst->total;
+		if (lst->name[0] != '.' || parse->flag_a == 1)
+			i += lst->total;
 		lst = lst->next;
 	}
 	ft_printf("total %d\n", i);
@@ -286,7 +287,7 @@ void	print_l(t_file *lst, t_truc *parse)
 	lst = jsp(lst, parse);
 	lst = jsp2(lst, parse);
 
-	ft_prtot(lst);
+	ft_prtot(lst, parse);
 	while (lst->next)
 	{
 		if (lst->type == 'l')

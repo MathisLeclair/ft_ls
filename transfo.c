@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 10:59:09 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/21 16:34:40 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/21 17:14:38 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,8 +294,8 @@ void	print_l(t_file *lst, t_truc *parse)
 		if (!parse->flag_r && (lst->name[0] != '.' || parse->flag_a == 1))
 		{
 			time = conv_time(lst->date, parse);
-			ft_printf("%s %s %s  %s  %s%s %s\n", lst->acces, lst->nbfconv, lst->owner,
-				lst->group, lst->sizeconv, time, lst->name);
+			ft_printf("%s %s %s  %s  %s%s %s%s%s\n", lst->acces, lst->nbfconv, lst->owner,
+				lst->group, lst->sizeconv, time, ft_color(lst, 1), lst->name, ft_color(lst, 0));
 		}
 		lst = lst->next;
 	}
@@ -304,16 +304,16 @@ void	print_l(t_file *lst, t_truc *parse)
 		if (lst->type == 'l')
 			linkatt(lst);
 		time = conv_time(lst->date, parse);
-		ft_printf("%s %s %s  %s  %s%s %s\n",lst->acces, lst->nbfconv, lst->owner,
-			lst->group, lst->sizeconv, time, lst->name);
+		ft_printf("%s %s %s  %s  %s%s %s%s%s\n",lst->acces, lst->nbfconv, lst->owner,
+			lst->group, lst->sizeconv, time, ft_color(lst, 1), lst->name, ft_color(lst, 0));
 	}
 	while (parse->flag_r && lst)
 	{
 		if (parse->flag_r && (lst->name[0] != '.' || parse->flag_a == 1))
 		{
 			time = conv_time(lst->date, parse);
-			ft_printf("%s %s %s  %s  %s%s %s\n",lst->acces, lst->nbfconv, lst->owner,
-				lst->group, lst->sizeconv, time, lst->name);
+			ft_printf("%s %s %s  %s  %s%s %s%s%s\n",lst->acces, lst->nbfconv, lst->owner,
+				lst->group, lst->sizeconv, time, ft_color(lst, 1), lst->name, ft_color(lst, 0));
 		}
 		lst = lst->prev;
 	}

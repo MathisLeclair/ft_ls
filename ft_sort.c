@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/14 19:57:55 by bfrochot          #+#    #+#             */
-/*   Updated: 2016/12/19 19:35:34 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/21 16:16:38 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,16 @@ int		ft_sortbase2(t_file *lst, int u)
 {
 	while (lst->prev)
 	{
-		if (ft_strcmp(lst->name, (lst->prev)->name) < 0)
+		if (ft_strcmp(lst->name, lst->prev->name) < 0)
 		{
 			if (lst->prev->prev)
 				lst->prev->prev->next = lst;
 			if (lst->next)
 				lst->next->prev = lst->prev;
-			(lst->prev)->next = lst->next;
+			lst->prev->next = lst->next;
 			lst->next = lst->prev;
-			lst->prev = (lst->prev)->prev;
-			(lst->next)->prev = lst;
+			lst->prev = lst->prev->prev;
+			lst->next->prev = lst;
 		}
 		else
 		{

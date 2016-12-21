@@ -20,7 +20,8 @@ FILE =	main \
 		ls_flag \
 		ls_core \
 		ft_sort \
-		transfo 
+		transfo \
+		list_free
 
 OBJ  := $(addsuffix .o, $(FILE))
 

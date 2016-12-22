@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/21 12:26:43 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/21 13:05:24 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/22 18:46:45 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	list_free_inner(t_file *lst)
 		free(lst->name);
 	if (lst->path)
 		free(lst->path);
+	if (lst->group)
+		free(lst->group);
 }
 
 void	list_free_down(t_file *lst)

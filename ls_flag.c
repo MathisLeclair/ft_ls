@@ -6,13 +6,22 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/13 13:12:51 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/21 16:33:11 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/22 18:49:03 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ls.h"
 
-int		flag_r(t_truc *parse, char *path)
+void	flag_r2(DIR *dir, char *caca, t_truc *parse)
+{
+	closedir(dir);
+	write(1, "\n", 1);
+	ft_printf("%s:\n", caca);
+	ft_strcat(caca, "/");
+	flag_r(parse, caca);
+}
+
+void	flag_r(t_truc *parse, char *path)
 {
 	DIR		*dir;
 	char	*caca;
@@ -26,18 +35,12 @@ int		flag_r(t_truc *parse, char *path)
 		if ((lsd->name[0] != '.' || lsd->name[1] != 0) && (lsd->name[1] != '.' 
 			|| lsd->name[2] != 0) && (lsd->name[0] != '.' || parse->flag_a))
 		{
-			caca = ft_strcat(caca, path);
+			ft_strcat(caca, path);
 			if (caca[ft_strlen(caca) - 1] != '/')
 				ft_strcat(caca, "/");
-			caca = ft_strcat(caca, lsd->name);
+			ft_strcat(caca, lsd->name);
 			if (lsd->type != 'l' && (dir = opendir(caca)))
-			{
-				closedir(dir);
-				write(1, "\n", 1);
-				ft_printf("%s:\n", caca);
-				caca = ft_strcat(caca, "/");
-				flag_r(parse, caca);
-			}
+				flag_r2(dir, caca, parse);
 			else if (errno == 13)
 				ft_printf("\n%s:\nft_ls: %s: Permission denied\n",
 				caca, lsd->name);
@@ -46,5 +49,4 @@ int		flag_r(t_truc *parse, char *path)
 		lsd = lsd->next;
 	}
 	free(lsd);
-	return (0);
 }

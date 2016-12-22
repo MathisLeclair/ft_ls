@@ -6,14 +6,16 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/12 15:20:17 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/21 13:08:31 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/22 17:43:23 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ls.h"
 
-void	ft_err(int i, char *tmp)
+int		ft_err(int i, char *tmp)
 {
+	if (tmp && tmp[ft_strlen(tmp) - 1] == '/')
+		tmp[ft_strlen(tmp) - 1] = '\0';
 	if (i == -1)
 	{
 		ft_printf("Illegal flag.\nusage: ./ls [-rRatTl]\n");
@@ -26,6 +28,7 @@ void	ft_err(int i, char *tmp)
 		ft_printf("ft_ls: %s: ", tmp);
 		perror(NULL);
 	}
+	return (1);
 }
 
 void	ls_ls(t_truc *machin, char *av)

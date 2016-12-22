@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/12 15:20:30 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/21 17:13:46 by mleclair         ###   ########.fr       */
+/*   Updated: 2016/12/22 17:20:39 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,18 @@ typedef struct		s_file
 	char			*name;
 	long int		date;
 	char			*path;
+	int				major;
+	int				minor;
 	struct s_file	*prev;
 	struct s_file	*next;
 }					t_file;
 
-int					flag_r(t_truc *parse, char *path);
+void				flag_r(t_truc *parse, char *path);
 void				ls_core(t_truc *parse, char *av, t_file **lsd);
 void				ft_lstsort(t_truc *parse, t_file *lst, int i);
 void				print_l(t_file *lst, t_truc *parse);
 char				*ft_strrev(char *str);
-void				ft_err(int i, char *tmp);
+int					ft_err(int i, char *tmp);
 void				list_free(t_file *lst);
 char				*ft_color(t_file *lsd, int i);
 

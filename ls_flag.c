@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/13 13:12:51 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/22 18:49:03 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/02 19:39:24 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,15 @@ void	flag_r(t_truc *parse, char *path)
 	DIR		*dir;
 	char	*caca;
 	t_file	*lsd;
+	t_file	*sav;
 
-	caca = malloc(2000);
+	caca = malloc(2048);
 	caca[0] = 0;
 	ls_core(parse, path, &lsd);
+	sav = lsd;
 	while (lsd)
 	{
-		if ((lsd->name[0] != '.' || lsd->name[1] != 0) && (lsd->name[1] != '.' 
+		if ((lsd->name[0] != '.' || lsd->name[1] != 0) && (lsd->name[1] != '.'
 			|| lsd->name[2] != 0) && (lsd->name[0] != '.' || parse->flag_a))
 		{
 			ft_strcat(caca, path);
@@ -48,5 +50,6 @@ void	flag_r(t_truc *parse, char *path)
 		}
 		lsd = lsd->next;
 	}
-	free(lsd);
+	free(caca);
+	list_free(sav);
 }

@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/13 16:58:32 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/22 17:32:49 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/02 19:29:21 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,19 +56,19 @@ char	*ft_color(t_file *lsd, int i)
 	if (i == 1)
 	{
 		if (lsd->type == 'd')
-			return("\e[0;36m");
+			return ("\e[0;36m");
 		if (lsd->type == 'c')
-			return("\e[7;33m");
+			return ("\e[7;33m");
 		if (lsd->type == 'b')
-			return("\e[0;32m");
+			return ("\e[0;32m");
 		if (lsd->type == 'p')
-			return("\e[1;33m");
+			return ("\e[1;33m");
 		if (lsd->type == 'l')
-			return("\e[0;35m");
+			return ("\e[0;35m");
 		if (lsd->type == 's')
-			return("\e[0;32m");
+			return ("\e[0;32m");
 	}
-	return("\e[0m");
+	return ("\e[0m");
 }
 
 void	lsd_null(t_file *lsd)
@@ -82,11 +82,13 @@ void	lsd_null(t_file *lsd)
 	lsd->size = 0;
 	lsd->sizeconv = NULL;
 	lsd->date = 0;
+	lsd->name = NULL;
 	lsd->path = NULL;
 	lsd->next = NULL;
 	lsd->prev = NULL;
 	lsd->minor = 0;
 	lsd->major = 0;
+	lsd->owner = NULL;
 }
 
 void	ft_lstcreate2(t_file *lsd, struct stat *buf,
@@ -121,16 +123,15 @@ t_file	*ft_lstcreate(struct dirent *dp, char *path)
 	pathname = ft_strjoin(path, dp->d_name);
 	buf = malloc(sizeof(struct stat));
 	lsd = malloc(sizeof(t_file));
+	lsd_null(lsd);
 	lsd->name = ft_strdup(dp->d_name);
 	if (lstat(pathname, buf) == -1)
 	{
 		free(buf);
-		lsd_null(lsd);
 		return (lsd);
 	}
 	group = getgrgid(buf->st_gid);
 	test = getpwuid(buf->st_uid);
-	lsd_null(lsd);
 	ft_lstcreate2(lsd, buf, test, path);
 	lsd->group = ft_strdup(group->gr_name);
 	free(buf);
@@ -156,13 +157,17 @@ int		ft_lst(struct dirent *dp, t_file *lst, DIR *dir, char *path)
 void	ls_core_to_long(t_truc *parse, t_file **lsd)
 {
 	if (!parse->flag_r && ((*lsd)->name[0] != '.' || parse->flag_a == 1))
-		ft_printf("%s%s%s\n", ft_color((*lsd), 1), (*lsd)->name, ft_color((*lsd), 0));
+		ft_printf("%s%s%s\n", ft_color((*lsd), 1), (*lsd)->name,
+		ft_color((*lsd), 0));
 	while ((*lsd)->next && ((*lsd) = (*lsd)->next))
-		if ((parse->flag_r == 0 || !(*lsd)->next) && ((*lsd)->name[0] != '.' || parse->flag_a == 1))
-			ft_printf("%s%s%s\n",ft_color((*lsd), 1), (*lsd)->name, ft_color((*lsd), 0));
+		if ((parse->flag_r == 0 || !(*lsd)->next) && ((*lsd)->name[0] != '.' ||
+		parse->flag_a == 1))
+			ft_printf("%s%s%s\n", ft_color((*lsd), 1),
+			(*lsd)->name, ft_color((*lsd), 0));
 	while (parse->flag_r && (*lsd)->prev && ((*lsd) = (*lsd)->prev))
 		if ((*lsd)->name[0] != '.' || parse->flag_a == 1)
-			ft_printf("%s%s%s\n",ft_color((*lsd), 1), (*lsd)->name, ft_color((*lsd), 0));
+			ft_printf("%s%s%s\n", ft_color((*lsd), 1),
+			(*lsd)->name, ft_color((*lsd), 0));
 }
 
 void	ls_core(t_truc *parse, char *path, t_file **lsd)
@@ -170,8 +175,7 @@ void	ls_core(t_truc *parse, char *path, t_file **lsd)
 	DIR				*dir;
 	struct dirent	*dp;
 
-	if (path[ft_strlen(path) - 1] != '/')
-		path = ft_strjoin(path, "/");
+	path = ft_strjoin(path, (path[ft_strlen(path) - 1] != '/' ? "/" : ""));
 	dir = opendir(path);
 	if (!dir && ft_err(errno, path))
 		return ;
@@ -185,10 +189,9 @@ void	ls_core(t_truc *parse, char *path, t_file **lsd)
 			ls_core_to_long(parse, lsd);
 		else
 			print_l((*lsd), parse);
-		if (!(parse->flag_rr))
-			list_free((*lsd));
 	}
-	while ((*lsd)->prev && !parse->flag_r)
+	while ((*lsd)->prev && !parse->flag_r && parse->flag_rr)
 		*lsd = (*lsd)->prev;
 	closedir(dir);
+	free(path);
 }

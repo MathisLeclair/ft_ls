@@ -61,7 +61,7 @@ $(NAME): $(OBJ)
 	@echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
 $(OBJ): %.o: %.c
-	@gcc -c -Wall -g -Wextra -Werror  $< -o $@
+	@gcc -c -Wall -Wextra -Werror  $< -o $@
 
 clean:
 	@rm -rf $(OBJ)

@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 10:59:09 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/22 18:51:03 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/02 19:59:30 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ char	*conv_time(long int date, t_truc *parse)
 		timec = timef2(timec);
 	else
 	{
+		timec = ft_strdup(timec);
 		i = (parse->flag_tt == 0) ? 13 : 10;
 		while (i--)
 			timec[len - i] = '\0';
@@ -97,10 +98,11 @@ void	ft_cpd3(t_file *lst, char **str)
 	tmp = ft_itoa(lst->nbf);
 	k = ft_strlen(tmp);
 	len = ft_strlen(*str);
-	while (k--)
+	while (k > 0 && len > 0)
 	{
-		len--;
 		(*str)[len] = tmp[k];
+		--len;
+		--k;
 	}
 	free(tmp);
 	lst->nbfconv = *str;
@@ -115,10 +117,11 @@ void	ft_cpd4(t_file *lst, char **str)
 	tmp = ft_itoa(lst->size);
 	k = ft_strlen(tmp);
 	len = ft_strlen(*str);
-	while (k--)
+	while (k > 0 && len > 0)
 	{
-		len--;
 		(*str)[len] = tmp[k];
+		--len;
+		--k;
 	}
 	free(tmp);
 	lst->sizeconv = *str;
@@ -131,7 +134,6 @@ t_file	*group_l(t_file *lst)
 	char	*str;
 
 	i = 0;
-	sav = malloc(sizeof(t_file));
 	sav = lst;
 	while (lst)
 	{
@@ -248,7 +250,7 @@ void	linkatt(t_file *lst)
 	char	*tmp;
 
 	ft_bzero(str, 10000);
-	tmp = malloc(ft_strlen(lst->path) + ft_strlen(lst->name));
+	tmp = malloc(ft_strlen(lst->path) + ft_strlen(lst->name) + 1);
 	*tmp = 0;
 	ft_strcat(tmp, lst->path);
 	ft_strcat(tmp, lst->name);
@@ -285,74 +287,12 @@ void	print_c(t_file *lst, t_truc *parse)
 	time = conv_time(lst->date, parse);
 	while ((lst->major / 256) > 0)
 		lst->major = lst->major / 256;
-	ft_printf("%s %s %s  %s  %2d, %3d%s %s%s%s\n", lst->acces, lst->nbfconv, lst->owner,
-		lst->group, lst->major, lst->minor, time, ft_color(lst, 1), lst->name, ft_color(lst, 0));
+	ft_printf("%s %s %s  %s  %2d, %3d%s %s%s%s\n", lst->acces,
+		lst->nbfconv, lst->owner,
+		lst->group, lst->major, lst->minor, time, ft_color(lst, 1),
+		lst->name, ft_color(lst, 0));
+	free(time);
 }
-
-// void	print_l(t_file *lst, t_truc *parse)
-// {
-// 	char *time;
-
-// 	if (lst->group)
-// 	{
-// 		lst = group_l(lst);
-// 		lst = owner_l(lst);
-// 		lst = jsp(lst, parse);
-// 		lst = jsp2(lst, parse);
-// 		ft_prtot(lst, parse);
-// 	}
-// 	while (lst->next)
-// 	{
-// 		if (lst->owner == NULL && !parse->flag_r && (lst->name[0] != '.' || parse->flag_a == 1))
-// 				ft_printf("ft_ls: %s: T'avais pas l'droit !\n", lst->name);
-// 		else if (lst->owner)
-// 		{
-// 			if (lst->type == 'l')
-// 				linkatt(lst);
-// 			if (lst->type == 'c')
-// 				print_c(lst, parse);
-// 			else if (!parse->flag_r && (lst->name[0] != '.' || parse->flag_a == 1) && lst->type != 'c')
-// 			{
-// 				time = conv_time(lst->date, parse);
-// 				ft_printf("%s %s %s  %s  %s%s %s%s%s\n", lst->acces, lst->nbfconv, lst->owner,
-// 					lst->group, lst->sizeconv, time, ft_color(lst, 1), lst->name, ft_color(lst, 0));
-// 			}
-// 		}
-// 		lst = lst->next;
-// 	}
-// 	if (lst->owner == NULL && !parse->flag_r && (lst->name[0] != '.' || parse->flag_a == 1))
-// 			ft_printf("ft_ls: %s: T'avais pas l'droit !\n", lst->name);
-// 	else if (lst->owner)
-// 	{
-// 		if (!parse->flag_r && (lst->name[0] != '.' || parse->flag_a == 1) && lst->type != 'c')
-// 		{
-// 			if (lst->type == 'l')
-// 				linkatt(lst);
-// 			time = conv_time(lst->date, parse);
-// 			ft_printf("%s %s %s  %s  %s%s %s%s%s\n",lst->acces, lst->nbfconv, lst->owner,
-// 				lst->group, lst->sizeconv, time, ft_color(lst, 1), lst->name, ft_color(lst, 0));
-// 		}
-// 		else if (lst->type == 'c')
-// 			print_c(lst, parse);
-// 	}
-// 	while (parse->flag_r && lst)
-// 	{
-// 		if (lst->owner == NULL && (lst->name[0] != '.' || parse->flag_a == 1))
-// 			ft_printf("ft_ls: %s: T'avais pas l'droit !\n", lst->name);
-// 		else
-// 		{
-// 			if (lst->type != 'c' && parse->flag_r && (lst->name[0] != '.' || parse->flag_a == 1))
-// 			{
-// 				time = conv_time(lst->date, parse);
-// 				ft_printf("%s %s %s  %s  %s%s %s%s%s\n",lst->acces, lst->nbfconv, lst->owner,
-// 					lst->group, lst->sizeconv, time, ft_color(lst, 1), lst->name, ft_color(lst, 0));
-// 			}
-// 			else if (lst->type == 'c')
-// 				print_c(lst, parse);
-// 		}
-// 		lst = lst->prev;
-// 	}
-// }
 
 void	print_l_too_long(t_truc *parse, t_file *lst)
 {
@@ -363,8 +303,11 @@ void	print_l_too_long(t_truc *parse, t_file *lst)
 		if (lst->type == 'l')
 			linkatt(lst);
 		time = conv_time(lst->date, parse);
-		ft_printf("%s %s %s  %s  %s%s %s%s%s\n",lst->acces, lst->nbfconv, lst->owner,
-			lst->group, lst->sizeconv, time, ft_color(lst, 1), lst->name, ft_color(lst, 0));
+		ft_printf("%s %s %s  %s  %s%s %s%s%s\n", lst->acces,
+			lst->nbfconv, lst->owner,
+			lst->group, lst->sizeconv, time, ft_color(lst, 1),
+			lst->name, ft_color(lst, 0));
+		free(time);
 	}
 	else if (lst->type == 'c')
 		print_c(lst, parse);
@@ -382,14 +325,16 @@ void	print_l(t_file *lst, t_truc *parse)
 	}
 	while (lst->next)
 	{
-		if (lst->owner == NULL && !parse->flag_r && (lst->name[0] != '.' || parse->flag_a == 1))
-				ft_printf("ft_ls: %s: T'avais pas l'droit !\n", lst->name);
+		if (lst->owner == NULL && !parse->flag_r &&
+			(lst->name[0] != '.' || parse->flag_a == 1))
+			ft_printf("ft_ls: %s: T'avais pas l'droit !\n", lst->name);
 		else if (lst->owner && !parse->flag_r)
 			print_l_too_long(parse, lst);
 		lst = lst->next;
 	}
-	if (lst->owner == NULL && !parse->flag_r && (lst->name[0] != '.' || parse->flag_a == 1))
-			ft_printf("ft_ls: %s: T'avais pas l'droit !\n", lst->name);
+	if (lst->owner == NULL && !parse->flag_r &&
+		(lst->name[0] != '.' || parse->flag_a == 1))
+		ft_printf("ft_ls: %s: T'avais pas l'droit !\n", lst->name);
 	else if (lst->owner && !parse->flag_r)
 		print_l_too_long(parse, lst);
 	while (parse->flag_r && lst)
@@ -401,4 +346,3 @@ void	print_l(t_file *lst, t_truc *parse)
 		lst = lst->prev;
 	}
 }
-

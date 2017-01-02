@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/12 15:20:17 by mleclair          #+#    #+#             */
-/*   Updated: 2016/12/22 17:43:23 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/02 19:45:16 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int		ft_err(int i, char *tmp)
 		ft_printf("Illegal flag.\nusage: ./ls [-rRatTl]\n");
 		exit(-1);
 	}
-	else if(errno == ENOTDIR)
+	else if (errno == ENOTDIR)
 		ft_printf("%s\n", tmp);
 	else
 	{
@@ -38,7 +38,10 @@ void	ls_ls(t_truc *machin, char *av)
 	if (machin->flag_rr == 1)
 		flag_r(machin, av);
 	else
+	{
 		ls_core(machin, av, &lsd);
+		list_free(lsd);
+	}
 }
 
 void	ft_initparse(t_truc *machin)
@@ -93,4 +96,5 @@ int		main(int ac, char **av)
 			write(1, "\n", 1);
 		++i;
 	}
+	while(1);
 }

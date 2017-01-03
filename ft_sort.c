@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/14 19:57:55 by bfrochot          #+#    #+#             */
-/*   Updated: 2016/12/21 16:16:38 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/03 18:27:01 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,21 +105,59 @@ t_file	*ft_sortt1(t_file *lst)
 	return (lst);
 }
 
+int			ft_listlen(t_file *lst)
+{
+	int i;
+
+	i = 0;
+	while (lst->next)
+	{
+		++i;
+		lst = lst->next;
+	}
+	++i;
+	while (lst->prev)
+		lst = lst->prev;
+	return (i);
+}
+
+void		ft_revlist(t_file *lst)
+{
+    t_file	*tmp;
+    int		i;
+
+    while (lst->prev)
+    	lst = lst->prev;
+    i = ft_listlen(lst);
+    while (lst->next)
+        lst = lst->next;
+    while (i)
+    {
+        tmp = lst->next;
+        lst->next = lst->prev;
+        lst->prev = tmp;
+        lst = lst->next;
+        --i;
+    }
+}
+
 void	ft_lstsort(t_truc *parse, t_file *lst, int i)
 {
 	int u;
 
 	u = 0;
-	if (parse->flag_t == 0)
+	if(parse->flag_t == 0)
 		while (u != (i - 1))
 		{
 			lst = ft_sortbase1(lst);
 			u = ft_sortbase2(lst, 0);
 		}
-	else
+	if(parse->flag_t == 1)
 		while (u != (i - 1))
 		{
 			lst = ft_sortt1(lst);
 			u = ft_sortt2(lst, 0);
 		}
+	if(parse->flag_r == 1 && parse->flag_t == 0)
+		ft_revlist(lst);
 }

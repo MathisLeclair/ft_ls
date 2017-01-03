@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 10:59:09 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/02 19:59:30 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/03 11:22:34 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void	ft_cpd3(t_file *lst, char **str)
 	tmp = ft_itoa(lst->nbf);
 	k = ft_strlen(tmp);
 	len = ft_strlen(*str);
-	while (k > 0 && len > 0)
+	while (k >= 0 && len >= 0)
 	{
 		(*str)[len] = tmp[k];
 		--len;

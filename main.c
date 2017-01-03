@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/12 15:20:17 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/02 19:45:16 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/03 11:18:48 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int		ft_err(int i, char *tmp)
 	{
 		ft_printf("ft_ls: %s: ", tmp);
 		perror(NULL);
+		exit(0);
 	}
 	return (1);
 }
@@ -96,5 +97,4 @@ int		main(int ac, char **av)
 			write(1, "\n", 1);
 		++i;
 	}
-	while(1);
 }

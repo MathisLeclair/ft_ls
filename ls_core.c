@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/13 16:58:32 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/02 19:29:21 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/03 21:17:48 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,20 +154,45 @@ int		ft_lst(struct dirent *dp, t_file *lst, DIR *dir, char *path)
 	return (i);
 }
 
-void	ls_core_to_long(t_truc *parse, t_file **lsd)
+void	ls_core_to_long_r(t_truc *parse, t_file **lsd)
 {
-	if (!parse->flag_r && ((*lsd)->name[0] != '.' || parse->flag_a == 1))
+	// while ((*lsd)->next)
+	// 	(*lsd) = (*lsd)->next;
+	if (((*lsd)->name[0] != '.' || parse->flag_a == 1))
 		ft_printf("%s%s%s\n", ft_color((*lsd), 1), (*lsd)->name,
 		ft_color((*lsd), 0));
-	while ((*lsd)->next && ((*lsd) = (*lsd)->next))
-		if ((parse->flag_r == 0 || !(*lsd)->next) && ((*lsd)->name[0] != '.' ||
+	while ((*lsd)->prev && ((*lsd) = (*lsd)->prev))
+		if (((*lsd)->prev) && ((*lsd)->name[0] != '.' ||
 		parse->flag_a == 1))
 			ft_printf("%s%s%s\n", ft_color((*lsd), 1),
 			(*lsd)->name, ft_color((*lsd), 0));
-	while (parse->flag_r && (*lsd)->prev && ((*lsd) = (*lsd)->prev))
-		if ((*lsd)->name[0] != '.' || parse->flag_a == 1)
-			ft_printf("%s%s%s\n", ft_color((*lsd), 1),
-			(*lsd)->name, ft_color((*lsd), 0));
+	if (((*lsd)->name[0] != '.' || parse->flag_a == 1))
+		ft_printf("%s%s%s\n", ft_color((*lsd), 1), (*lsd)->name,
+		ft_color((*lsd), 0));
+	while ((*lsd)->prev)
+		(*lsd) = (*lsd)->prev;
+}
+
+void	ls_core_to_long(t_truc *parse, t_file **lsd)
+{
+	if (parse->flag_r)
+	{
+		if (((*lsd)->name[0] != '.' || parse->flag_a == 1))
+			ft_printf("%s%s%s\n", ft_color((*lsd), 1), (*lsd)->name,
+			ft_color((*lsd), 0));
+		while ((*lsd)->next && ((*lsd) = (*lsd)->next))
+			if (((*lsd)->next) && ((*lsd)->name[0] != '.' ||
+			parse->flag_a == 1))
+				ft_printf("%s%s%s\n", ft_color((*lsd), 1),
+				(*lsd)->name, ft_color((*lsd), 0));
+		if (((*lsd)->name[0] != '.' || parse->flag_a == 1))
+			ft_printf("%s%s%s\n", ft_color((*lsd), 1), (*lsd)->name,
+			ft_color((*lsd), 0));
+		while ((*lsd)->prev)
+			(*lsd) = (*lsd)->prev;
+	}
+	else if (parse->flag_r)
+		ls_core_to_long_r(parse, lsd);
 }
 
 void	ls_core(t_truc *parse, char *path, t_file **lsd)

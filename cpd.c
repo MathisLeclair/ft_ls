@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/04 11:34:35 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 18:24:05 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 18:56:58 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_cpd(t_file *lst, char *str)
 	int len;
 
 	len = 0;
-	while (lst->owner[len])
+	while (lst->owner && lst->owner[len])
 	{
 		str[len] = lst->owner[len];
 		len++;
@@ -31,7 +31,7 @@ void	ft_cpd2(t_file *lst, char *str)
 	int len;
 
 	len = 0;
-	while (lst->group[len])
+	while (lst->group && lst->group[len])
 	{
 		str[len] = lst->group[len];
 		len++;

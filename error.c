@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/04 17:23:51 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 17:24:07 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 19:12:20 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,11 @@ int		ft_err(int i, char *tmp)
 		ft_printf("Allocation error. Bitch.\n");
 		exit(-2);
 	}
-	else if (errno == ENOTDIR)
-		ft_printf("%s\n", tmp);
+	else if (i == ENOTDIR && tmp[ft_strlen(tmp) - 1] != '/')
+	{
+		printf("%s\n", tmp);
+		exit(0);
+	}
 	else
 	{
 		ft_printf("ft_ls: %s: ", tmp);

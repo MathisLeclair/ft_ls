@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/04 17:49:26 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 18:22:45 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 19:13:23 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,15 @@ void	ls_core_to_long(t_truc *parse, t_file **lsd)
 		(*lsd) = (*lsd)->prev;
 }
 
-void	ls_core(t_truc *parse, char *path, t_file **lsd)
+void	ls_core(t_truc *parse, char *apath, t_file **lsd)
 {
 	DIR				*dir;
 	struct dirent	*dp;
+	char			*path;
 
-	path = ft_strjoin(path, (path[ft_strlen(path) - 1] != '/' ? "/" : ""));
+	path = ft_strjoin(apath, (apath[ft_strlen(apath) - 1] != '/' ? "/" : ""));
 	dir = opendir(path);
-	if (!dir && ft_err(errno, path))
+	if (!dir && ft_err(errno, apath))
 		return ;
 	if ((dp = readdir(dir)))
 	{

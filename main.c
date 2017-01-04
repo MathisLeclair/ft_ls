@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/12 15:20:17 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 18:27:49 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 19:03:11 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_file	*ft_start(char *path)
 	if (!(lsd = malloc(sizeof(t_file))))
 		ft_err(-10, 0);
 	lsd_null(lsd);
+	lsd->name = ft_strdup(path);
 	if (lstat(path, buf) == -1)
 	{
 		free(buf);
@@ -32,7 +33,6 @@ t_file	*ft_start(char *path)
 	ft_elemcreate2(lsd, buf, path, path);
 	if (group)
 		lsd->group = ft_strdup(group->gr_name);
-	lsd->name = ft_strdup(path);
 	free(buf);
 	return (lsd);
 }

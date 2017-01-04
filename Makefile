@@ -21,7 +21,12 @@ FILE =	main \
 		ls_core \
 		ft_sort \
 		transfo \
-		list_free
+		list_free \
+		cpd \
+		jsp \
+		print_l \
+		sort_part2 \
+		core_p2
 
 OBJ  := $(addsuffix .o, $(FILE))
 

@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/04 11:46:22 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 17:49:28 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 18:24:55 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	type(struct stat *buf)
 	return (ret);
 }
 
-int	getacl(char *name)
+int		getacl(char *name)
 {
 	acl_t		facl;
 	acl_entry_t	ae;

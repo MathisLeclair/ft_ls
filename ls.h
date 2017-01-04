@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/12 15:20:30 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 17:49:22 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 18:23:27 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ void				ft_cpd2(t_file *lst, char *str);
 void				ft_cpd3(t_file *lst, char **str);
 void				ft_cpd4(t_file *lst, char **str);
 
-void				ft_elemcreate2(t_file *lsd, struct stat *buf, char *path, char *pathnm);
+void				ft_elemcreate2(t_file *lsd, struct stat *buf, char *path,
+					char *pathnm);
 void				lst_l_prepare(t_file *lst, t_truc *parse, int boi);
 
 void				ft_prtot(t_file *lst, t_truc *parse);

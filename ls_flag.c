@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/13 13:12:51 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/02 19:39:24 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 11:18:58 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ void	flag_r(t_truc *parse, char *path)
 	t_file	*lsd;
 	t_file	*sav;
 
-	caca = malloc(2048);
-	caca[0] = 0;
+	caca = ft_strnew(2048);
 	ls_core(parse, path, &lsd);
 	sav = lsd;
 	while (lsd)

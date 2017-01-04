@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/12 15:20:30 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/02 17:54:46 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 11:09:36 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,7 @@ char				*ft_strrev(char *str);
 int					ft_err(int i, char *tmp);
 void				list_free(t_file *lst);
 char				*ft_color(t_file *lsd, int i);
+
+void				print_l_reverse(t_file *lst, t_truc *parse);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 10:59:09 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/03 11:22:34 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 11:12:32 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -313,16 +313,47 @@ void	print_l_too_long(t_truc *parse, t_file *lst)
 		print_c(lst, parse);
 }
 
+void	lst_l_prepare(t_file *lst, t_truc *parse)
+{
+	lst = group_l(lst);
+	lst = owner_l(lst);
+	lst = jsp(lst, parse);
+	lst = jsp2(lst, parse);
+	ft_prtot(lst, parse);
+}
+
+void	print_l_reverse(t_file *lst, t_truc *parse)
+{
+	if (lst->group)
+		lst_l_prepare(lst, parse);
+	while (lst->prev)
+	{
+		if (lst->owner == NULL && !parse->flag_r &&
+			(lst->name[0] != '.' || parse->flag_a == 1))
+			ft_printf("ft_ls: %s: T'avais pas l'droit !\n", lst->name);
+		else if (lst->owner && !parse->flag_r)
+			print_l_too_long(parse, lst);
+		lst = lst->prev;
+	}
+	if (lst->owner == NULL && !parse->flag_r &&
+		(lst->name[0] != '.' || parse->flag_a == 1))
+		ft_printf("ft_ls: %s: T'avais pas l'droit !\n", lst->name);
+	else if (lst->owner && !parse->flag_r)
+		print_l_too_long(parse, lst);
+	while (parse->flag_r && lst)
+	{
+		if (lst->owner == NULL && (lst->name[0] != '.' || parse->flag_a == 1))
+			ft_printf("ft_ls: %s: T'avais pas l'droit !\n", lst->name);
+		else
+			print_l_too_long(parse, lst);
+		lst = lst->next;
+	}
+}
+
 void	print_l(t_file *lst, t_truc *parse)
 {
 	if (lst->group)
-	{
-		lst = group_l(lst);
-		lst = owner_l(lst);
-		lst = jsp(lst, parse);
-		lst = jsp2(lst, parse);
-		ft_prtot(lst, parse);
-	}
+		lst_l_prepare(lst, parse);
 	while (lst->next)
 	{
 		if (lst->owner == NULL && !parse->flag_r &&

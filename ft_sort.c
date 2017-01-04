@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/04 11:04:14 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 18:38:32 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 18:44:40 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int		ft_listlen(t_file *lst)
 	int i;
 
 	i = 1;
-	while(lst->next)
+	while (lst->next)
 		lst = lst->next;
 	while (lst->prev && ++i)
 		lst = lst->prev;

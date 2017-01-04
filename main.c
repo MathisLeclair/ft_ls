@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/12 15:20:17 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 19:03:11 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 19:25:04 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,8 @@ int		main(int ac, char **av)
 		ls_ls(machin, "./");
 	while (i < ac)
 	{
+		if (ft_strlen(av[i]) == 0)
+			ft_err(-666, "");
 		ls_ls(machin, av[i]);
 		if (i < ac - 1)
 			write(1, "\n", 1);

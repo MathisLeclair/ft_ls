@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/04 11:37:26 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 17:49:36 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 18:42:05 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	lst_l_prepare(t_file *lst, t_truc *parse, int bool)
 	lst = owner_l(lst);
 	lst = jsp(lst, parse);
 	lst = jsp2(lst, parse);
-	if (bool)
+	if (bool && (ft_listlen(lst) > 2 || parse->flag_a == 1))
 		ft_prtot(lst, parse);
 }
 

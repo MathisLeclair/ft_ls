@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/12 15:20:30 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 18:23:27 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 18:36:48 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ t_file				*jsp(t_file *lst, t_truc *parse);
 t_file				*jsp2(t_file *lst, t_truc *parse);
 int					jsp_commun(t_file *lst, int i);
 char				*timef2(char *timec);
+
+int					ft_listlen(t_file *lst);
 
 t_file				*ft_sortt1(t_file *lst);
 int					ft_sortt2(t_file *lst, int u);

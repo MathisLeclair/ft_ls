@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_sort.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bfrochot <bfrochot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/04 11:04:14 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 14:46:06 by bfrochot         ###   ########.fr       */
+/*   Updated: 2017/01/04 18:38:32 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,11 @@ int		ft_listlen(t_file *lst)
 {
 	int i;
 
-	i = 0;
-	while (lst->prev)
-	{
-		++i;
+	i = 1;
+	while(lst->next)
+		lst = lst->next;
+	while (lst->prev && ++i)
 		lst = lst->prev;
-	}
-	++i;
 	return (i);
 }
 

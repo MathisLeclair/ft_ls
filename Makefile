@@ -27,7 +27,8 @@ FILE =	main \
 		print_l \
 		sort_part2 \
 		core_p2 \
-		elemcreate
+		elemcreate \
+		error
 
 OBJ  := $(addsuffix .o, $(FILE))
 

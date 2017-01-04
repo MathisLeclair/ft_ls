@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   core_p2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bfrochot <bfrochot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/04 11:46:22 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 14:39:48 by bfrochot         ###   ########.fr       */
+/*   Updated: 2017/01/04 17:49:28 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,27 @@ char	type(struct stat *buf)
 	return (ret);
 }
 
-char	*droit(int mode, t_file *lsd)
+int	getacl(char *name)
+{
+	acl_t		facl;
+	acl_entry_t	ae;
+
+	facl = acl_get_link_np(name, ACL_TYPE_EXTENDED);
+	if (facl && (acl_get_entry(facl, ACL_FIRST_ENTRY, &ae) == -1))
+	{
+		acl_free(facl);
+		return (0);
+	}
+	if (facl != NULL)
+	{
+		acl_free(facl);
+		return (1);
+	}
+	acl_free(facl);
+	return (0);
+}
+
+char	*droit(int mode, t_file *lsd, char *pathname)
 {
 	static char *str;
 
@@ -48,6 +68,11 @@ char	*droit(int mode, t_file *lsd)
 	(mode & S_IROTH) ? str[7] = 'r' : 0;
 	(mode & S_IWOTH) ? str[8] = 'w' : 0;
 	(mode & S_IXOTH) ? str[9] = 'x' : 0;
+	if ((lsd->type != 'l' && listxattr(pathname, NULL, 0, 0) > 0) ||
+		(lsd->type == 'l' && listxattr(pathname, NULL, 0, XATTR_NOFOLLOW) > 0))
+		str[10] = '@';
+	else
+		str[10] = (getacl(pathname)) ? '+' : ' ';
 	str[0] = lsd->type;
 	return (str);
 }

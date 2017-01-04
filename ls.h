@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ls.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bfrochot <bfrochot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/12 15:20:30 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 14:57:49 by bfrochot         ###   ########.fr       */
+/*   Updated: 2017/01/04 17:49:22 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define LS_H
 
 # include <unistd.h>
+# include <dirent.h>
+# include <uuid/uuid.h>
 # include <stdlib.h>
 # include <time.h>
 # include <pwd.h>
@@ -21,6 +23,7 @@
 # include <dirent.h>
 # include <sys/stat.h>
 # include <sys/xattr.h>
+# include <sys/acl.h>
 # include <errno.h>
 # include <grp.h>
 # include "./libft/libft.h"
@@ -70,6 +73,9 @@ void				ft_cpd2(t_file *lst, char *str);
 void				ft_cpd3(t_file *lst, char **str);
 void				ft_cpd4(t_file *lst, char **str);
 
+void				ft_elemcreate2(t_file *lsd, struct stat *buf, char *path, char *pathnm);
+void				lst_l_prepare(t_file *lst, t_truc *parse, int boi);
+
 void				ft_prtot(t_file *lst, t_truc *parse);
 void				linkatt(t_file *lst);
 t_file				*owner_l(t_file *lst);
@@ -79,7 +85,7 @@ char				*timef2(char *timec);
 
 t_file				*jsp(t_file *lst, t_truc *parse);
 t_file				*jsp2(t_file *lst, t_truc *parse);
-void				jsp_commun(t_file *lst, int i);
+int					jsp_commun(t_file *lst, int i);
 char				*timef2(char *timec);
 
 t_file				*ft_sortt1(t_file *lst);
@@ -92,6 +98,6 @@ t_file				*ft_elemcreate(struct dirent *dp, char *path);
 void				lsd_null(t_file *lsd);
 char				*ft_color(t_file *lsd, int i);
 char				type(struct stat *buf);
-char				*droit(int mode, t_file *lsd);
+char				*droit(int mode, t_file *lsd, char *path);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jsp.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bfrochot <bfrochot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/04 11:38:48 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 14:11:26 by bfrochot         ###   ########.fr       */
+/*   Updated: 2017/01/04 16:45:06 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*timef2(char *timec)
 	return (tmp);
 }
 
-void	jsp_commun(t_file *lst, int i)
+int		jsp_commun(t_file *lst, int i)
 {
 	char *str;
 
@@ -45,6 +45,18 @@ void	jsp_commun(t_file *lst, int i)
 	if ((int)ft_strlen(str) > i)
 		i = ft_strlen(str);
 	free(str);
+	return (i);
+}
+
+int		jsp_commun_oupa(t_file *lst, int i)
+{
+	char *str;
+
+	str = ft_itoa(lst->nbf);
+	if ((int)ft_strlen(str) > i)
+		i = ft_strlen(str);
+	free(str);
+	return (i);
 }
 
 t_file	*jsp2(t_file *lst, t_truc *parse)
@@ -58,7 +70,7 @@ t_file	*jsp2(t_file *lst, t_truc *parse)
 	while (lst)
 	{
 		if (parse->flag_a == 1 || lst->name[0] != '.')
-			jsp_commun(lst, i);
+			i = jsp_commun(lst, i);
 		lst = lst->next;
 	}
 	lst = sav;
@@ -85,7 +97,7 @@ t_file	*jsp(t_file *lst, t_truc *parse)
 	while (lst)
 	{
 		if (parse->flag_a == 1 || lst->name[0] != '.')
-			jsp_commun(lst, i);
+			i = jsp_commun_oupa(lst, i);
 		lst = lst->next;
 	}
 	lst = sav;

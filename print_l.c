@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_l.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bfrochot <bfrochot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/04 11:37:26 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 14:58:34 by bfrochot         ###   ########.fr       */
+/*   Updated: 2017/01/04 17:49:36 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,20 @@ void	print_l_too_long(t_truc *parse, t_file *lst)
 		print_c(lst, parse);
 }
 
-void	lst_l_prepare(t_file *lst, t_truc *parse)
+void	lst_l_prepare(t_file *lst, t_truc *parse, int bool)
 {
 	lst = group_l(lst);
 	lst = owner_l(lst);
 	lst = jsp(lst, parse);
 	lst = jsp2(lst, parse);
-	ft_prtot(lst, parse);
+	if (bool)
+		ft_prtot(lst, parse);
 }
 
 void	print_l(t_file *lst, t_truc *parse)
 {
 	if (lst->group)
-		lst_l_prepare(lst, parse);
+		lst_l_prepare(lst, parse, 1);
 	while (lst->next)
 	{
 		if (lst->owner == NULL &&

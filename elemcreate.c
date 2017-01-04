@@ -25,7 +25,7 @@ char	*ft_pathname(char *path, char *name)
 	return (pathname);
 }
 
-void	ft_elemcreate2(t_file *lsd, struct stat *buf, char *path)
+void	ft_elemcreate2(t_file *lsd, struct stat *buf, char *path, char *pathnm)
 {
 	dev_t			toast;
 	struct passwd	*test;
@@ -37,7 +37,7 @@ void	ft_elemcreate2(t_file *lsd, struct stat *buf, char *path)
 	lsd->date = buf->st_mtime;
 	lsd->nbf = buf->st_nlink;
 	lsd->type = type(buf);
-	lsd->acces = droit(buf->st_mode, lsd);
+	lsd->acces = droit(buf->st_mode, lsd, pathnm);
 	lsd->path = ft_strdup(path);
 	lsd->total = buf->st_blocks;
 	if (lsd->type == 'c')
@@ -69,7 +69,7 @@ t_file	*ft_elemcreate(struct dirent *dp, char *path)
 		return (lsd);
 	}
 	group = getgrgid(buf->st_gid);
-	ft_elemcreate2(lsd, buf, path);
+	ft_elemcreate2(lsd, buf, path, pathname);
 	if (group)
 		lsd->group = ft_strdup(group->gr_name);
 	free(buf);

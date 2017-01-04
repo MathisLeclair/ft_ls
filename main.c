@@ -3,47 +3,65 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bfrochot <bfrochot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/12 15:20:17 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 14:52:39 by bfrochot         ###   ########.fr       */
+/*   Updated: 2017/01/04 18:01:36 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ls.h"
 
-int		ft_err(int i, char *tmp)
+t_file	*ft_start(char *path)
 {
-	if (i == -1)
+	struct stat		*buf;
+	struct group	*group;
+	t_file			*lsd;
+
+	if (!(buf = malloc(sizeof(struct stat))))
+		ft_err(-10, 0);
+	if (!(lsd = malloc(sizeof(t_file))))
+		ft_err(-10, 0);
+	lsd_null(lsd);
+	if (lstat(path, buf) == -1)
 	{
-		ft_printf("Illegal flag.\nusage: ./ls [-rRatTl]\n");
-		exit(-1);
+		free(buf);
+		return (lsd);
 	}
-	else if (i == -10)
-	{
-		ft_printf("Allocation error. Bitch.\n");
-		exit(-2);
-	}
-	else if (errno == ENOTDIR)
-		ft_printf("%s\n", tmp);
-	else
-	{
-		ft_printf("ft_ls: %s: ", tmp);
-		perror(NULL);
-		exit(0);
-	}
-	return (1);
+	group = getgrgid(buf->st_gid);
+	ft_elemcreate2(lsd, buf, path, path);
+	if (group)
+		lsd->group = ft_strdup(group->gr_name);
+	lsd->name = ft_strdup(path);
+	free(buf);
+	return (lsd);
 }
 
-void	ls_ls(t_truc *machin, char *av)
+void	ls_ls(t_truc *machin, char *str)
 {
-	t_file *lsd;
+	t_file	*lsd;
+	char	*time;
 
+	lsd = ft_start(str);
+	lst_l_prepare(lsd, machin, 0);
+	if (lsd->type == 'l' && machin->flag_l == 1)
+	{
+		free(lsd->path);
+		lsd->path = "";
+		linkatt(lsd);
+		time = conv_time(lsd->date, machin);
+		printf("%s %s %s %s %s %s %s%s%s\n", lsd->acces, lsd->sizeconv,
+		lsd->owner, lsd->group, lsd->nbfconv, time, ft_color(lsd, 1),
+		lsd->name, ft_color(lsd, 0));
+		free(time);
+		exit(1);
+	}
+	list_free(lsd);
 	if (machin->flag_rr == 1)
-		flag_rr(machin, av);
+		flag_rr(machin, str);
 	else
 	{
-		ls_core(machin, av, &lsd);
+		ls_core(machin, str, &lsd);
 		list_free(lsd);
 	}
 }

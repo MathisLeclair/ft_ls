@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_sort.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bfrochot <bfrochot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/04 11:04:14 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 11:45:03 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 14:46:06 by bfrochot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,12 @@ int		ft_listlen(t_file *lst)
 	int i;
 
 	i = 0;
-	while (lst->next)
+	while (lst->prev)
 	{
 		++i;
-		lst = lst->next;
+		lst = lst->prev;
 	}
 	++i;
-	while (lst->prev)
-		lst = lst->prev;
 	return (i);
 }
 
@@ -33,11 +31,9 @@ void	ft_revlist(t_file *lst)
 	t_file	*tmp;
 	int		i;
 
-	while (lst->prev)
-		lst = lst->prev;
-	i = ft_listlen(lst);
 	while (lst->next)
 		lst = lst->next;
+	i = ft_listlen(lst);
 	while (i > 0)
 	{
 		tmp = lst->next;

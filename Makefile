@@ -26,7 +26,8 @@ FILE =	main \
 		jsp \
 		print_l \
 		sort_part2 \
-		core_p2
+		core_p2 \
+		elemcreate
 
 OBJ  := $(addsuffix .o, $(FILE))
 

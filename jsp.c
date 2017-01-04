@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jsp.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bfrochot <bfrochot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/04 11:38:48 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 11:48:49 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 14:11:26 by bfrochot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ char	*timef2(char *timec)
 	int		i;
 
 	i = 0;
-	tmp = malloc(14);
+	if (!(tmp = malloc(14)))
+		ft_err(-10, 0);
 	tmp[0] = ' ';
 	tmp[1] = timec[1];
 	tmp[2] = timec[2];
@@ -63,7 +64,8 @@ t_file	*jsp2(t_file *lst, t_truc *parse)
 	lst = sav;
 	while (lst)
 	{
-		str = malloc(i + 1);
+		if (!(str = malloc(i + 1)))
+			ft_err(-10, 0);
 		ft_memset(str, ' ', i);
 		str[i] = '\0';
 		ft_cpd4(lst, &str);
@@ -89,7 +91,8 @@ t_file	*jsp(t_file *lst, t_truc *parse)
 	lst = sav;
 	while (lst)
 	{
-		str = malloc(i + 1);
+		if (!(str = malloc(i + 1)))
+			ft_err(-10, 0);
 		ft_memset(str, ' ', i);
 		str[i] = '\0';
 		ft_cpd3(lst, &str);

@@ -3,50 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   ls_core.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bfrochot <bfrochot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/13 16:58:32 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 11:46:42 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 14:57:39 by bfrochot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ls.h"
 
-t_file	*ft_lstcreate(struct dirent *dp, char *path)
-{
-	struct stat		*buf;
-	struct group	*group;
-	struct passwd	*test;
-	t_file			*lsd;
-	char			*pathname;
-
-	pathname = ft_strjoin(path, dp->d_name);
-	buf = malloc(sizeof(struct stat));
-	lsd = malloc(sizeof(t_file));
-	lsd_null(lsd);
-	lsd->name = ft_strdup(dp->d_name);
-	if (lstat(pathname, buf) == -1)
-	{
-		free(buf);
-		return (lsd);
-	}
-	group = getgrgid(buf->st_gid);
-	test = getpwuid(buf->st_uid);
-	ft_lstcreate2(lsd, buf, test, path);
-	lsd->group = ft_strdup(group->gr_name);
-	free(buf);
-	free(pathname);
-	return (lsd);
-}
-
-int		ft_lst(struct dirent *dp, t_file *lst, DIR *dir, char *path)
+int		ft_lstcreate(struct dirent *dp, t_file *lst, DIR *dir, char *path)
 {
 	int i;
 
 	i = 1;
 	while ((dp = readdir(dir)))
 	{
-		lst->next = ft_lstcreate(dp, path);
+		lst->next = ft_elemcreate(dp, path);
 		(lst->next)->prev = lst;
 		lst = lst->next;
 		++i;
@@ -82,14 +55,13 @@ void	ls_core(t_truc *parse, char *path, t_file **lsd)
 		return ;
 	if ((dp = readdir(dir)))
 	{
-		*lsd = ft_lstcreate(dp, path);
-		ft_lstsort(parse, *lsd, ft_lst(dp, *lsd, dir, path));
+		*lsd = ft_elemcreate(dp, path);
+		ft_lstsort(parse, *lsd, ft_lstcreate(dp, *lsd, dir, path));
 		while ((*lsd)->prev)
 			(*lsd) = (*lsd)->prev;
 		if (parse->flag_l == 0)
 			ls_core_to_long(parse, lsd);
 		else
-			parse->flag_r ? print_l_reverse((*lsd), parse) :
 			print_l((*lsd), parse);
 	}
 	while ((*lsd)->prev && !parse->flag_r && parse->flag_rr)

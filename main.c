@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bfrochot <bfrochot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/12 15:20:17 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 11:33:37 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 14:52:39 by bfrochot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,15 @@
 
 int		ft_err(int i, char *tmp)
 {
-	if (tmp && tmp[ft_strlen(tmp) - 1] == '/')
-		tmp[ft_strlen(tmp) - 1] = '\0';
 	if (i == -1)
 	{
 		ft_printf("Illegal flag.\nusage: ./ls [-rRatTl]\n");
 		exit(-1);
+	}
+	else if (i == -10)
+	{
+		ft_printf("Allocation error. Bitch.\n");
+		exit(-2);
 	}
 	else if (errno == ENOTDIR)
 		ft_printf("%s\n", tmp);
@@ -37,7 +40,7 @@ void	ls_ls(t_truc *machin, char *av)
 	t_file *lsd;
 
 	if (machin->flag_rr == 1)
-		flag_r(machin, av);
+		flag_rr(machin, av);
 	else
 	{
 		ls_core(machin, av, &lsd);
@@ -79,7 +82,8 @@ int		main(int ac, char **av)
 	int		i;
 
 	i = 0;
-	machin = malloc(sizeof(t_truc));
+	if (!(machin = malloc(sizeof(t_truc))))
+		ft_err(-10, 0);
 	ft_initparse(machin);
 	while (++i < ac)
 	{

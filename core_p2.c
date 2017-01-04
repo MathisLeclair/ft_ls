@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   core_p2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bfrochot <bfrochot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/04 11:46:22 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 11:46:52 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 14:39:48 by bfrochot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ char	*droit(int mode, t_file *lsd)
 {
 	static char *str;
 
-	str = malloc(12);
+	if (!(str = malloc(12)))
+		ft_err(-10, 0);
 	ft_strcpy(str, "---------- \0");
 	(mode & S_IRUSR) ? str[1] = 'r' : 0;
 	(mode & S_IWUSR) ? str[2] = 'w' : 0;
@@ -89,25 +90,4 @@ void	lsd_null(t_file *lsd)
 	lsd->minor = 0;
 	lsd->major = 0;
 	lsd->owner = NULL;
-}
-
-void	ft_lstcreate2(t_file *lsd, struct stat *buf,
-	struct passwd *test, char *path)
-{
-	dev_t toast;
-
-	lsd->owner = ft_strdup(test->pw_name);
-	lsd->size = buf->st_size;
-	lsd->date = buf->st_mtime;
-	lsd->nbf = buf->st_nlink;
-	lsd->type = type(buf);
-	lsd->acces = droit(buf->st_mode, lsd);
-	lsd->path = ft_strdup(path);
-	lsd->total = buf->st_blocks;
-	if (lsd->type == 'c')
-	{
-		toast = buf->st_rdev;
-		lsd->minor = toast % 256;
-		lsd->major = toast;
-	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   transfo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bfrochot <bfrochot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 10:59:09 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 11:49:46 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 15:01:28 by bfrochot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ t_file	*group_l(t_file *lst)
 	lst = sav;
 	while (lst)
 	{
-		str = malloc(i + 1);
+		if (!(str = malloc(i + 1)))
+			ft_err(-10, 0);
 		ft_memset(str, ' ', i);
 		str[i] = '\0';
 		ft_cpd2(lst, str);
@@ -81,7 +82,8 @@ t_file	*owner_l(t_file *lst)
 	lst = sav;
 	while (lst)
 	{
-		str = malloc(i + 1);
+		if (!(str = malloc(i + 1)))
+			ft_err(-10, 0);
 		ft_memset(str, ' ', i);
 		str[i] = '\0';
 		ft_cpd(lst, str);
@@ -98,13 +100,15 @@ void	linkatt(t_file *lst)
 	char	*tmp;
 
 	ft_bzero(str, 10000);
-	tmp = malloc(ft_strlen(lst->path) + ft_strlen(lst->name) + 1);
+	if (!(tmp = malloc(ft_strlen(lst->path) + ft_strlen(lst->name) + 1)))
+		ft_err(-10, 0);
 	*tmp = 0;
 	ft_strcat(tmp, lst->path);
 	ft_strcat(tmp, lst->name);
 	len = readlink(tmp, str, 9999);
 	free(tmp);
-	new = malloc(len + 5 + ft_strlen(lst->name));
+	if (!(new = malloc(len + 5 + ft_strlen(lst->name))))
+		ft_err(-10, 0);
 	*new = 0;
 	ft_strcat(new, lst->name);
 	ft_strcat(new, " -> ");

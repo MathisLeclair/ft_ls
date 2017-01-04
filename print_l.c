@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_l.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bfrochot <bfrochot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/04 11:37:26 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 11:37:42 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 14:58:34 by bfrochot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,58 +54,22 @@ void	lst_l_prepare(t_file *lst, t_truc *parse)
 	ft_prtot(lst, parse);
 }
 
-void	print_l_reverse(t_file *lst, t_truc *parse)
-{
-	if (lst->group)
-		lst_l_prepare(lst, parse);
-	while (lst->prev)
-	{
-		if (lst->owner == NULL && !parse->flag_r &&
-			(lst->name[0] != '.' || parse->flag_a == 1))
-			ft_printf("ft_ls: %s: T'avais pas l'droit !\n", lst->name);
-		else if (lst->owner && !parse->flag_r)
-			print_l_too_long(parse, lst);
-		lst = lst->prev;
-	}
-	if (lst->owner == NULL && !parse->flag_r &&
-		(lst->name[0] != '.' || parse->flag_a == 1))
-		ft_printf("ft_ls: %s: T'avais pas l'droit !\n", lst->name);
-	else if (lst->owner && !parse->flag_r)
-		print_l_too_long(parse, lst);
-	while (parse->flag_r && lst)
-	{
-		if (lst->owner == NULL && (lst->name[0] != '.' || parse->flag_a == 1))
-			ft_printf("ft_ls: %s: T'avais pas l'droit !\n", lst->name);
-		else
-			print_l_too_long(parse, lst);
-		lst = lst->next;
-	}
-}
-
 void	print_l(t_file *lst, t_truc *parse)
 {
 	if (lst->group)
 		lst_l_prepare(lst, parse);
 	while (lst->next)
 	{
-		if (lst->owner == NULL && !parse->flag_r &&
+		if (lst->owner == NULL &&
 			(lst->name[0] != '.' || parse->flag_a == 1))
-			ft_printf("ft_ls: %s: T'avais pas l'droit !\n", lst->name);
-		else if (lst->owner && !parse->flag_r)
+			ft_printf("ft_ls: %s: You shall not pass !\n", lst->name);
+		else if (lst->owner)
 			print_l_too_long(parse, lst);
 		lst = lst->next;
 	}
-	if (lst->owner == NULL && !parse->flag_r &&
+	if (lst->owner == NULL &&
 		(lst->name[0] != '.' || parse->flag_a == 1))
-		ft_printf("ft_ls: %s: T'avais pas l'droit !\n", lst->name);
-	else if (lst->owner && !parse->flag_r)
+		ft_printf("ft_ls: %s: You shall not pass !\n", lst->name);
+	else if (lst->owner)
 		print_l_too_long(parse, lst);
-	while (parse->flag_r && lst)
-	{
-		if (lst->owner == NULL && (lst->name[0] != '.' || parse->flag_a == 1))
-			ft_printf("ft_ls: %s: T'avais pas l'droit !\n", lst->name);
-		else
-			print_l_too_long(parse, lst);
-		lst = lst->prev;
-	}
 }

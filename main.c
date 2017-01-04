@@ -6,7 +6,7 @@
 /*   By: mleclair <mleclair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/12 15:20:17 by mleclair          #+#    #+#             */
-/*   Updated: 2017/01/04 18:01:36 by mleclair         ###   ########.fr       */
+/*   Updated: 2017/01/04 18:27:49 by mleclair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	ls_ls(t_truc *machin, char *str)
 		lsd->path = "";
 		linkatt(lsd);
 		time = conv_time(lsd->date, machin);
-		printf("%s %s %s %s %s %s %s%s%s\n", lsd->acces, lsd->sizeconv,
+		ft_printf("%s %s %s %s %s %s %s%s%s\n", lsd->acces, lsd->sizeconv,
 		lsd->owner, lsd->group, lsd->nbfconv, time, ft_color(lsd, 1),
 		lsd->name, ft_color(lsd, 0));
 		free(time);
